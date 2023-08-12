@@ -3,11 +3,12 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
+import Main from '../Layout/Main';
 
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <h1>This is a browser router</h1>,
+        element: <Main />,
         errorElement: <span>Error</span>,
         children:[
           {

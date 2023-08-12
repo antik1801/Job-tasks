@@ -5,13 +5,13 @@ import { initializeApp } from "firebase/app";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_apiKey, 
-  authDomain: import.meta.env.VITE_authDomain, 
-  projectId: import.meta.env.VITE_projectId,
-  storageBucket: import.meta.env.VITE_storageBucket,
-  messagingSenderId: import.meta.env.VITE_messagingSenderId,
-  appId: import.meta.env.VITE_appId
+  apiKey: "AIzaSyAyo8Urg4MF3i5yeOKEBzjm_k6tRyIaQSg",
+  authDomain: "auro-phones.firebaseapp.com",
+  projectId: "auro-phones",
+  storageBucket: "auro-phones.appspot.com",
+  messagingSenderId: "265019942116",
+  appId: "1:265019942116:web:a9f45720e204c4b8b7b8f1"
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+export const app = initializeApp(firebaseConfig);
