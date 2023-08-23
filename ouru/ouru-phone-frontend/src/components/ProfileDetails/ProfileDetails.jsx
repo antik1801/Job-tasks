@@ -1,9 +1,10 @@
 import React from 'react'
+import ProfileLayouts from '../../miscellaneous/ProfileLayouts/ProfileLayouts'
 
 function ProfileDetails() {
   return (
-    <div>
-      This is profile details
+    <div className='min-w-full'>
+      <ProfileLayouts />
     </div>
   )
 }
