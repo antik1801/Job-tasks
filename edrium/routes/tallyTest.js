@@ -1,17 +1,19 @@
-"use strict";
-
-const xml2js = require("xml2js");
 const axios = require("axios");
+const xml2js = require("xml2js");
 
 const calculateJsonData = (result) => {
-  return result
+    const body = result.ENVELOPE.BODY
+   const description = result.ENVELOPE.BODY.DESC.CMPINFO
+   const companyName = result.ENVELOPE.BODY.DATA.COLLECTION || 0;
+    return body
 };
 
 const convertXMLtoJSON = (data) => {
   let jsonData = null;
   xml2js.parseString(data, { explicitArray: false }, (err, result) => {
     if (err) {
-      throw new Error("Error converting XML to JSON.");
+      console.log("tallyTest: 12");
+      throw new Error("Error converting XML to JSON");
     }
     jsonData = calculateJsonData(result);
   });
@@ -24,7 +26,6 @@ const sendPostRequest = async (xmlRequest) => {
       "Content-Type": "application/xml",
     },
   });
-  console.log(response.data);
   return response.data;
 };
 
@@ -33,11 +34,11 @@ const parseResponse = async (xmlRequest) => {
     const data = await sendPostRequest(xmlRequest);
     return convertXMLtoJSON(data);
   } catch (error) {
-    throw new Error("Error sending Tally request.");
+    throw new Error("Error sending tally request: tallytest - 6");
   }
 };
 
-exports.reciptNoteVouchers = async (req, res) => {
+exports.tallyTest = async (req, res) => {
   const xmlRequest = `
   <ENVELOPE Action="">
   <HEADER>
@@ -57,7 +58,7 @@ exports.reciptNoteVouchers = async (req, res) => {
         <TDLMESSAGE>
           <COLLECTION ISMODIFY="No" ISFIXED="No" ISINITIALIZE="No" ISOPTION="No" ISINTERNAL="No" NAME="CustomVoucherCollection">
             <TYPE>Vouchers : VoucherType</TYPE>
-            <CHILDOF>$$VchTypeReceipt</CHILDOF>
+            <CHILDOF>$$VchTypePayment</CHILDOF>
             <BELONGSTO>Yes</BELONGSTO>
             <NATIVEMETHOD>*, *.*</NATIVEMETHOD>
           </COLLECTION>
@@ -70,7 +71,7 @@ exports.reciptNoteVouchers = async (req, res) => {
 
   try {
     const jsonData = await parseResponse(xmlRequest);
-    res.status(200).json(jsonData);
+    res.send(jsonData);
   } catch (error) {
     res.status(500).send(error.message);
   }

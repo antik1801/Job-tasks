@@ -4,10 +4,7 @@ const xml2js = require("xml2js");
 const axios = require("axios");
 
 const calculateJsonData = (result) => {
-  return result.ENVELOPE.BSNAME.map((bsName, index) => ({
-    name: bsName.DSPACCNAME.DSPDISPNAME,
-    amount: parseFloat(result.ENVELOPE.BSAMT[index].BSMAINAMT) || 0,
-  }));
+ return result.ENVELOPE.BODY
 };
 
 const convertXMLtoJSON = (data) => {

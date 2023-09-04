@@ -4,6 +4,7 @@ const xml2js = require('xml2js');
 const axios = require("axios");
 
 const calculateJsonData = (result) => {
+  return result
   return result.ENVELOPE.BSNAME.map((bsName, index) => ({
     name: bsName.DSPACCNAME.DSPDISPNAME,
     amount: parseFloat(result.ENVELOPE.BSAMT[index].BSMAINAMT) || 0,
@@ -65,7 +66,9 @@ exports.BalanceSheet = async (req, res) => {
   `;
 
   try {
+    console.log(xmlRequest)
     const jsonData = await parseResponse(xmlRequest);
+    console.log(jsonData)
     res.status(200).json(jsonData);
   } catch (error) {
     res.status(500).send(error.message);

@@ -1,21 +1,19 @@
-"use strict";
-
-const xml2js = require("xml2js");
 const axios = require("axios");
+const xml2js = require("xml2js");
 
 const calculateJsonData = (result) => {
-  return result.ENVELOPE.BSNAME.map((bsName, index) => ({
-    name: bsName.DSPACCNAME.DSPDISPNAME,
-    amount: parseFloat(result.ENVELOPE.BSAMT[index].BSMAINAMT) || 0,
-  }));
+    const body = result.ENVELOPE.BODY
+   const description = result.ENVELOPE.BODY.DESC.CMPINFO
+   const companyName = result.ENVELOPE.BODY.DATA.COLLECTION || 0;
+    return body
 };
-
 
 const convertXMLtoJSON = (data) => {
   let jsonData = null;
   xml2js.parseString(data, { explicitArray: false }, (err, result) => {
     if (err) {
-      throw new Error("Error converting XML to JSON.");
+      console.log("tallyTest: 12");
+      throw new Error("Error converting XML to JSON");
     }
     jsonData = calculateJsonData(result);
   });
@@ -28,7 +26,6 @@ const sendPostRequest = async (xmlRequest) => {
       "Content-Type": "application/xml",
     },
   });
-  console.log(response.data);
   return response.data;
 };
 
@@ -37,13 +34,13 @@ const parseResponse = async (xmlRequest) => {
     const data = await sendPostRequest(xmlRequest);
     return convertXMLtoJSON(data);
   } catch (error) {
-    throw new Error("Error sending Tally request.");
+    throw new Error("Error sending tally request: tallytest - 6");
   }
 };
 
 exports.paymentVouchers = async (req, res) => {
   const xmlRequest = `
-    <ENVELOPE Action="">
+  <ENVELOPE Action="">
   <HEADER>
     <VERSION>1</VERSION>
     <TALLYREQUEST>EXPORT</TALLYREQUEST>
@@ -72,10 +69,10 @@ exports.paymentVouchers = async (req, res) => {
 </ENVELOPE>
     `;
 
-    try {
-        const jsonData = await parseResponse(xmlRequest)
-        res.status(200).json(jsonData)
-    } catch (error) {
-        res.status(500).send(error.message)
-    }
+  try {
+    const jsonData = await parseResponse(xmlRequest);
+    res.send(jsonData);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
 };
